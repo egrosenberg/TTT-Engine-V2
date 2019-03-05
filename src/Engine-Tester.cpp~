@@ -1,10 +1,12 @@
-#include "Engine-Tester.h"
+#include <iostream>
+#include <SDL2/SDL.h>
+#include "TTTlib/TTTlib.h"
 
 int main()
 {
-	TTTprogram program = new TTTprogram("TestWindow", WINDOW_W, WINDOW_H, 0);
+	TTTprogram *program = new TTTprogram("TestWindow", WINDOW_W, WINDOW_H, 0);
 	
-	while (program->TestWindow)
+	while (program->TestWindow())
 	{
 		SDL_RenderClear(program->getRenderer());		
 

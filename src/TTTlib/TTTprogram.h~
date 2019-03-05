@@ -15,10 +15,11 @@ public:
 
 	SDL_Renderer* getRenderer()
 		{return m_Renderer;}
-
+	void ClearToColor(Uint8 r, Uint8 g, Uint8 b, Uint8 a);
 	bool TestWindow();
+	void handle();
 
 	virtual  ~TTTprogram();
-}
+};
 
 #endif
