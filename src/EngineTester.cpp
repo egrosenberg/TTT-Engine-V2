@@ -5,7 +5,7 @@ int main(int argc,  char *argv[])
 	//Create our main program
 	TTTprogram *program = new TTTprogram("TestWindow", WINDOW_W, WINDOW_H, 0);
 	TTTcontroller *controller = new TTTcontroller(program);
-	TTTsprite *image = new TTTsprite(program->GetRenderer(), "testImage\0", 1, 10, 10, 500, 400);
+	TTTsprite *image = new TTTsprite(program->GetRenderer(), "testImage\0", 10, 10, 10, 500, 400);
 
 	bool dragging = false;
 
@@ -48,7 +48,7 @@ int main(int argc,  char *argv[])
 		{
 			image->SetCoordinates(cursorX + offsetX, cursorY + offsetY);
 		}
-		SDL_Delay(1000/60);
+		SDL_Delay(1000/12);
 	}
 	
 	delete program;
