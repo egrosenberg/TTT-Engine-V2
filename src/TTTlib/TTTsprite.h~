@@ -4,6 +4,7 @@
 #include <SDL2\SDL.h>
 #include <cstdlib>
 #include <cstring>
+#include <ctime>
 
 class TTTsprite
 {
@@ -15,6 +16,14 @@ public:
 
 	int GetPosX();
 	int GetPosY();
+	void SetPosX(int x)
+	{
+		m_Rect.x = x;
+	}
+	void SetPosY(int y)
+	{
+		m_Rect.y = y;
+	}
 
 	virtual ~TTTsprite();
 

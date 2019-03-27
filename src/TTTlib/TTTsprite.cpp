@@ -45,7 +45,6 @@ void TTTsprite::handle()
 {
 	m_CurrentFrame = (SDL_GetTicks() / 100) % m_FrameCount;
 
-	std::cout << "Current Frame " << m_CurrentFrame << '\n';
 
 	SDL_Rect tempSrcRect = m_Rect;
 	tempSrcRect.x = m_CurrentFrame * m_Rect.w;

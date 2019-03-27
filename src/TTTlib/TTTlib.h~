@@ -3,5 +3,6 @@
 
 #include "TTTprogram.h"
 #include "TTTcontroller.h"
+#include "TTTsprite.h"
 
 #endif
