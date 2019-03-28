@@ -10,6 +10,7 @@ public:
 	TTTcontroller(TTTprogram *program);
 	bool GetOpen();
 	const char *GetInput();
+	bool GetKeyState(int key);
 	int GetCursorX();
 	int GetCursorY();
 	virtual ~TTTcontroller();

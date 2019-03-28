@@ -29,6 +29,7 @@ int TTTsprite::GetPosY()
 
 void TTTsprite::SetCoordinates(int x, int y)
 {
+	std::cout << "aaa\n";
 	if (x != NULL)
 	{
 		m_Rect.x = x;

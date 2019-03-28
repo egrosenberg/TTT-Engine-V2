@@ -7,6 +7,7 @@
 #include <iostream>
 #include <SDL2\SDL.h>
 #include <cmath>
+#include <cstring>
 
 #include "TTTlib\TTTlib.h"
 

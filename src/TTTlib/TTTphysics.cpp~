@@ -1,6 +1,6 @@
 #include "TTTphysics.h"
 
-TTTphysics::TTTphysics(int x, int y, int w, int h, float weight, float Cd, float density, float Cf)
+TTTphysics::TTTphysics(int x, int y, int w, int h, float weight, float Cd, float density, float Cf, float friction)
 {
 	m_PosX = x;
 	m_PosY = y;
@@ -13,6 +13,8 @@ TTTphysics::TTTphysics(int x, int y, int w, int h, float weight, float Cd, float
 	m_Cd = Cd;
 	m_Density = density;
 	m_Cf = Cf;
+
+	m_Friction = friction;
 	
 	m_Falling = false;
 	m_Rising = false;
@@ -40,6 +42,21 @@ void TTTphysics::handle()
 	float acceleration = (weight - drag) / m_Weight;
 
 	m_MomentumY = m_MomentumY + (acceleration * 0.12);
+
+	if (m_MomentumX > 0)
+	{
+		if (m_Friction > m_MomentumX)
+			m_MomentumX = 0;
+		else
+			m_MomentumX -= m_Friction;
+	}
+	if (m_MomentumX < 0)
+        {
+                if (m_Friction > fabs(m_MomentumX))
+                        m_MomentumX = 0;
+                else
+                        m_MomentumX += m_Friction;
+        }
 }
 
 TTTphysics::~TTTphysics()

@@ -26,6 +26,14 @@ int TTTcontroller::GetCursorY()
         return temp;
 }
 
+bool GetKeyState(int key)
+{
+	//create an array to hold our keyboard state
+	const Uint8 *currentState = SDL_GetKeyboardState(NULL);
+	//return the value of the key passed in
+	return currentState[key];
+}
+
 const char* TTTcontroller::GetInput()
 {
 	if (SDL_PollEvent(&m_Event))
@@ -49,10 +57,10 @@ const char* TTTcontroller::GetInput()
                         switch (m_Event.button.button)
                         {
                                 case SDL_BUTTON_LEFT:
-                                        return "Left Mouse Up";
+                                        return "LMU";
                                         break;
                                 case SDL_BUTTON_RIGHT:
-                                        return "Right Mouse Up";
+                                        return "RMU";
                                         break;
                         }
                 }

@@ -9,21 +9,13 @@
 class TTTsprite
 {
 public:
-	TTTsprite(SDL_Renderer *renderer, char *path, int frameCount, int x, int y, int w, int h);
+	TTTsprite(SDL_Renderer *renderer, char *path, int frameCount, int x, int y, int w, int h, int srcW, int srcH);
 	
 	void handle();
 	void SetCoordinates(int x, int y);
 
 	int GetPosX();
 	int GetPosY();
-	void SetPosX(int x)
-	{
-		m_Rect.x = x;
-	}
-	void SetPosY(int y)
-	{
-		m_Rect.y = y;
-	}
 
 	virtual ~TTTsprite();
 

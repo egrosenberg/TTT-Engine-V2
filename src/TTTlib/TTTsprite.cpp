@@ -1,13 +1,16 @@
 #include "TTTsprite.h"
 #include <iostream>
 
-TTTsprite::TTTsprite(SDL_Renderer *renderer, char *path, int frameCount, int x, int y, int w, int h)
+TTTsprite::TTTsprite(SDL_Renderer *renderer, char *path, int frameCount, int x, int y, int w, int h, int srcW, int srcH)
 {
 	m_CurrentFrame = 1;
 	m_FrameCount = frameCount;
 
 	m_Path = path;
 	m_Renderer = renderer;
+
+	m_srcW = srcW;
+	m_srcH = srcH;
 	
 	m_Surface = SDL_LoadBMP(m_Path);
 	m_Texture = SDL_CreateTextureFromSurface(m_Renderer, m_Surface);
@@ -29,6 +32,7 @@ int TTTsprite::GetPosY()
 
 void TTTsprite::SetCoordinates(int x, int y)
 {
+	std::cout << "aaa\n";
 	if (x != NULL)
 	{
 		m_Rect.x = x;
@@ -46,8 +50,10 @@ void TTTsprite::handle()
 	m_CurrentFrame = (SDL_GetTicks() / 100) % m_FrameCount;
 
 
-	SDL_Rect tempSrcRect = m_Rect;
-	tempSrcRect.x = m_CurrentFrame * m_Rect.w;
+	SDL_Rect tempSrcRect;
+	tempSrcRect.w = m_srcW;
+	tempSrcRect.h = m_srcH;
+	tempSrcRect.x = m_CurrentFrame * m_srcW;
 	tempSrcRect.y = 0;
 
 	SDL_RenderCopy (m_Renderer, m_Texture, &tempSrcRect, &m_Rect);
