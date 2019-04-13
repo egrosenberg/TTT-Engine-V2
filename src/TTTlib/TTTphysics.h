@@ -1,5 +1,7 @@
-#ifndef _SRC_TTTLIB_H_
-#define _SRC_TTTLIB_H_
+#ifndef _TTT_PHYSICS_H_
+#define _TTT_PHYSICS_H_
+
+#define GRAVITY 1.0
 
 #include <cmath>
 #include <SDL2/SDL.h>
@@ -8,10 +10,11 @@
 class TTTphysics
 {
 public:
-	TTTphysics(int x, int y, int w, int h, float weight, float Cd, float density, float Cf, float friction);
+	TTTphysics(int x, int y, int w, int h, float weight, float Cd, float density, float Cf, float friction, int jumpCount);
 
+	void TestCollision(SDL_Rect *rect);
 	void handle();
-
+	void UpdatePosition();
 	float GetMY()
 	{
 		return m_MomentumY;
@@ -28,6 +31,40 @@ public:
 	{
 		m_MomentumX = MX;
 	}
+	int GetPosX()
+	{
+		return m_PosX;
+	}
+	int GetPosY()
+	{
+		return m_PosY;
+	}
+	void SetPosX(int x)
+	{
+		m_PosX = x;
+	}
+	void SetPosY(int y)
+	{
+		m_PosY = y;
+	}
+	bool CanJump()
+	{
+		return (m_JumpCounter > 0);
+	}
+	void Jump()
+	{
+		m_JumpCounter--;
+		m_Grounded = false;
+	}
+	bool Grounded()
+	{
+		return m_Grounded;
+	}
+	void UpdateRect(SDL_Rect rect)
+	{
+		m_Width = rect.w;
+		m_Height = rect.h;
+	}
 
 	virtual ~TTTphysics();
 private:
@@ -43,9 +80,9 @@ private:
 	float m_Density;
 	float m_Cf; //Coeffiient of friction
 	int m_FallingTimeStamp;
-	bool m_Falling;
-	bool m_Rising;
-
+	int m_JumpCount;
+	int m_JumpCounter;
+	bool m_Grounded;
 	float m_Friction;
 };
 

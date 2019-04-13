@@ -5,17 +5,37 @@ int main(int argc,  char *argv[])
 	//Create our main program
 	TTTprogram *program = new TTTprogram("TestWindow", WINDOW_W, WINDOW_H, 0);
 	TTTcontroller *controller = new TTTcontroller(program);
-	TTTsprite *image = new TTTsprite(program->GetRenderer(), "testSpriteSheet.bmp", 10, 10, 10, 231/4, 253/4, 231, 253);
-	TTTphysics *physics = new TTTphysics(0, 0, 231, 253, 1, 0.8, 2.7, 1, 5);
+	TTTsprite *animations [5];
+	animations [TTTplayer::TTT_PlayerState::RUN] = new TTTsprite(program->GetRenderer(), "marioSpriteSheet.bmp", 3, 0, 1000, 51, 84, 17, 28, 5, 81, 12);
+	animations [TTTplayer::TTT_PlayerState::IDLE] = new TTTsprite(program->GetRenderer(), "marioSpriteSheet.bmp", 1, 0, 1000, 51, 84, 17, 28, 5, 81, 12);
+	animations [TTTplayer::TTT_PlayerState::JUMP] = new TTTsprite(program->GetRenderer(), "marioSpriteSheet.bmp", 1, 0, 1000, 51, 84, 17, 28, 5 + ((17+12)*3) + 2, 81, 12);
+	animations [TTTplayer::TTT_PlayerState::TURNING] = new TTTsprite(program->GetRenderer(), "marioSpriteSheet.bmp", 1, 0, 1000, 51, 84, 17, 28, 158-5, 81, 12);;
+	animations [TTTplayer::TTT_PlayerState::STATE_COUNT] = NULL;
 
+	TTTphysics *physics = new TTTphysics(0, 0, animations [0]->GetRect().w, animations [0]->GetRect().h, 20, 0.47, 0.6, 5, 3, 1);
+
+	int rockCount = 10;
+	TTTsprite *rocks [rockCount];
 	bool dragging = false;
+
+	physics->SetMX(0);
+	physics->SetMY(0);
 
 	//Declare and initialize two variables to store our cursor offset from our selected sprite
 	int offsetX = 0;
 	int offsetY = 0;
 	//an int to declare our speed when we use the arrow keys
-	int velocity = 20;
+	int velocity = 7;
 
+	for (int n = 0; n < 9; n++)
+	{
+		rocks [n] = new TTTsprite(program->GetRenderer(), "rock.bmp", 1, 10 + (n*300), 500 - (n*100), 128, 86, 640, 426, 0, 0, 0);
+	}
+
+	rocks [9] = new TTTsprite(program->GetRenderer(), "rock.bmp", 1, 0, 600, 128 * 10, 400/*86*/, 640, 426, 0, 0, 0);
+
+	TTTplayer *player = new TTTplayer(animations, physics, controller, rocks);
+	
 	//As long as the window is there run this loop
 	while (program->TestWindow() && controller->GetOpen())
 	{
@@ -23,85 +43,35 @@ int main(int argc,  char *argv[])
 		int cursorX = controller->GetCursorX();
                 int cursorY = controller->GetCursorY();
 		
-		const char *input = controller->GetInput();
-		if (input != 0)
-		{
-			//std::cout << input << std::endl;
-			//Check if input is a mouse up or down
-			//If left click down, then make it so we are in dragging mode
-			if (input [0] == 'L' && input [1] == 'M' && input [2] == 'D')
-			{
-				dragging = true;
-				offsetX = image->GetPosX() - cursorX;
-				offsetY = image->GetPosY() - cursorY; 
-			}
-			//Once the button is let go, release dragging mode
-			else if (input [0] == 'L' && input [1] == 'M' && input [2] == 'U')
-			{
-				dragging  = false;
-			}
-
-			if (controller->GetKeyState(SDL_SCANCODE_UP))
-			{
-				physics->SetMY(-velocity);
-				std::cout << "Up\n";
-			}
-			if (controller->GetKeyState(SDL_SCANCODE_DOWN))
-			{
-				physics->SetMY(velocity);
-				std::cout << "Down\n";
-			}
-			if (controller->GetKeyState(SDL_SCANCODE_LEFT))
-			{
-				physics->SetMX(-velocity);
-				std::cout << "Left\n";
-			}
-			if (controller->GetKeyState(SDL_SCANCODE_RIGHT))
-			{
-				physics->SetMX(velocity);
-				std::cout << "Right\n";
-			}
-		}
-
-		if (controller->GetKeyState(SDL_SCANCODE_UP))
-                {
-			physics->SetMY(-velocity);
-                     	std::cout << "Up\n";
-                }
-               	if (controller->GetKeyState(SDL_SCANCODE_DOWN))
-                {
-                	physics->SetMY(velocity);
-                        std::cout << "Down\n";
-               	}
-                if (controller->GetKeyState(SDL_SCANCODE_LEFT))
-                {
-                        physics->SetMX(-velocity);
-                        std::cout << "Left\n";
-                }
-                if (controller->GetKeyState(SDL_SCANCODE_RIGHT))
-                {
-                        physics->SetMX(velocity);
-                        std::cout << "Right\n";
-       		}
-
-		physics->handle();
-		std::cout << physics->GetMX() << '\n';
-		image->SetCoordinates(image->GetPosX() + physics->GetMX(), image->GetPosY() + physics->GetMY);
+		//physics->handle();
+		//physics->UpdatePosition();
+		//image->SetCoordinates(physics->GetPosX(), physics->GetPosY());
 		//image->SetCoordinates(NULL, image->GetPosY() + physics->GetMY());
 		//std::cout << physics->GetMY() << '\n';
 		//Clean the screen
-		program->ClearToColor(255, 200, 255, 255);
-		image->handle();
+		program->ClearToColor(255, 255, 255, 255);
+		for (int n = 0; n < rockCount; n++)
+                {
+                        rocks [n]->handle();
+                };
+		player->handle();
+		//image->handle();
 		program->handle();
 		
-		//If we are dragging, make it so that the sprite follows with the cursor
-		//if (dragging)
+		//if (physics->GetPosY() > 900)
 		//{
-		//	image->SetCoordinates(cursorX + offsetX, cursorY + offsetY);
+		//	physics->SetPosY(10);
+		//	physics->SetPosX(10);
 		//}
+
 		SDL_Delay(1000/120);
 	}
-	
+
+	delete physics;
+	for (int n = 0; n < 5; n++)
+	{
+		delete animations [n];
+	}
 	delete program;
 	delete controller;
 

@@ -1,7 +1,7 @@
 #include "TTTsprite.h"
 #include <iostream>
 
-TTTsprite::TTTsprite(SDL_Renderer *renderer, char *path, int frameCount, int x, int y, int w, int h, int srcW, int srcH)
+TTTsprite::TTTsprite(SDL_Renderer *renderer, char *path, int frameCount, int x, int y, int w, int h, int srcW, int srcH, int offsetX, int offsetY, int spacing)
 {
 	m_CurrentFrame = 1;
 	m_FrameCount = frameCount;
@@ -18,6 +18,11 @@ TTTsprite::TTTsprite(SDL_Renderer *renderer, char *path, int frameCount, int x, 
 	m_Rect.y = y; 
 	m_Rect.w = w; 
 	m_Rect.h = h;
+
+	m_OffsetX = offsetX;
+	m_OffsetY = offsetY;
+	m_Spacing = spacing;
+	m_Direction = SDL_FLIP_HORIZONTAL;
 }
 
 int TTTsprite::GetPosX()
@@ -30,9 +35,10 @@ int TTTsprite::GetPosY()
 	return m_Rect.y;
 }
 
+
+
 void TTTsprite::SetCoordinates(int x, int y)
 {
-	std::cout << "aaa\n";
 	if (x != NULL)
 	{
 		m_Rect.x = x;
@@ -47,16 +53,16 @@ clock_t previousClock = clock();
 
 void TTTsprite::handle()
 {
-	m_CurrentFrame = (SDL_GetTicks() / 100) % m_FrameCount;
+	m_CurrentFrame = (SDL_GetTicks() / 166) % m_FrameCount;
 
 
 	SDL_Rect tempSrcRect;
 	tempSrcRect.w = m_srcW;
 	tempSrcRect.h = m_srcH;
-	tempSrcRect.x = m_CurrentFrame * m_srcW;
-	tempSrcRect.y = 0;
+	tempSrcRect.x = (m_CurrentFrame * m_srcW) + m_OffsetX + (m_CurrentFrame * m_Spacing);
+	tempSrcRect.y = m_OffsetY;
 
-	SDL_RenderCopy (m_Renderer, m_Texture, &tempSrcRect, &m_Rect);
+	SDL_RenderCopyEx (m_Renderer, m_Texture, &tempSrcRect, &m_Rect, 0, NULL, m_Direction);
 }
 
 TTTsprite::~TTTsprite()

@@ -4,5 +4,6 @@
 #include "TTTprogram.h"
 #include "TTTcontroller.h"
 #include "TTTsprite.h"
+#include "TTTphysics.h"
 
 #endif

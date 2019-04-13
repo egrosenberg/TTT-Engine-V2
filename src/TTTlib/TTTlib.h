@@ -5,5 +5,6 @@
 #include "TTTcontroller.h"
 #include "TTTsprite.h"
 #include "TTTphysics.h"
+#include "TTTplayer.h"
 
 #endif

@@ -26,7 +26,7 @@ int TTTcontroller::GetCursorY()
         return temp;
 }
 
-bool GetKeyState(int key)
+bool TTTcontroller::GetKeyState(int key)
 {
 	//create an array to hold our keyboard state
 	const Uint8 *currentState = SDL_GetKeyboardState(NULL);
